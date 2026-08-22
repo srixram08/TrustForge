@@ -17,6 +17,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { Logo } from './Logo';
 
 const NAV_ITEMS = [
   { name: 'SOC Dashboard', path: '/soc', icon: LayoutDashboard },
@@ -46,24 +47,11 @@ export const Sidebar: React.FC = () => {
     <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen sticky top-0 select-none z-30 font-sans shadow-sm">
       {/* Brand Header */}
       <div 
-        className="p-5 border-b border-slate-100 flex items-center gap-3 cursor-pointer"
+        className="p-5 border-b border-slate-100 flex items-center justify-between cursor-pointer"
         onClick={() => navigate('/')}
         title="Return to TrustForge Platform Home"
       >
-        <div className="w-10 h-10 rounded-2xl bg-[#111111] flex items-center justify-center text-white shadow-md">
-          <ShieldAlert className="w-5 h-5 text-[#D4FF00]" />
-        </div>
-        <div>
-          <div className="flex items-center gap-1.5">
-            <span className="font-black text-base tracking-tight text-slate-900 font-sans">
-              TRUSTFORGE.
-            </span>
-            <span className="bg-[#D4FF00] text-black text-[9px] font-mono px-1.5 py-0.5 rounded font-black">
-              SOC
-            </span>
-          </div>
-          <p className="text-[10px] text-slate-500 font-mono font-medium">Forge Trust in AI</p>
-        </div>
+        <Logo size="sm" showWordmark={true} />
       </div>
 
       {/* Navigation Links */}

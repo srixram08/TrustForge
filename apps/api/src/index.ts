@@ -19,7 +19,7 @@ app.use(express.json());
 // 1. HEALTH & OVERVIEW
 // ==========================================
 app.get('/api/health', (req: Request, res: Response) => {
-  res.json({ status: 'ok', platform: 'AgentShield X Enterprise Engine', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', platform: 'TrustForge Enterprise Engine', timestamp: new Date().toISOString() });
 });
 
 app.get('/api/overview', async (req: Request, res: Response) => {

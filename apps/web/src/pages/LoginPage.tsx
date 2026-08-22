@@ -18,6 +18,8 @@ import {
   Fingerprint
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { GlitterWarp } from '../components/GlitterWarp';
+import { Logo } from '../components/Logo';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -64,27 +66,27 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#E8E7E3] text-slate-900 flex flex-col font-sans relative overflow-hidden selection:bg-[#D4FF00] selection:text-black">
+      {/* React Bits Pro Glitter Warp Starfield Tunnel Background */}
+      <GlitterWarp 
+        particleCount={600} 
+        speed={1.4} 
+        warpIntensity={1.9} 
+        particleColor="#D4FF00" 
+        glitterColors={['#D4FF00', '#111111', '#00F0FF', '#FFFFFF', '#84CC16']}
+        className="opacity-70"
+      />
+
       {/* Subtle Background Glows */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#D4FF00]/10 blur-[130px] pointer-events-none rounded-full"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#D4FF00]/15 blur-[130px] pointer-events-none rounded-full"></div>
       <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-slate-200/60 blur-[120px] pointer-events-none rounded-full"></div>
 
       {/* Outer Spatial Canvas Frame */}
-      <div className="w-full max-w-[1440px] mx-auto p-4 sm:p-6 lg:p-8 flex flex-col flex-1">
+      <div className="w-full max-w-[1440px] mx-auto p-4 sm:p-6 lg:p-8 flex flex-col flex-1 relative z-10">
         
-        {/* Top Header Navigation Pill */}
+        {/* Top Header Navigation Pill with Cybernetic AI Logo */}
         <header className="flex items-center justify-between py-4 px-6 bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/80 shadow-sm mb-6">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-9 h-9 rounded-2xl bg-[#111111] flex items-center justify-center text-white shadow-md">
-              <ShieldAlert className="w-5 h-5 text-[#D4FF00]" />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-lg tracking-tight text-slate-900 font-sans">
-                TRUSTFORGE.
-              </span>
-              <span className="bg-[#D4FF00] text-black text-[9px] font-mono px-1.5 py-0.5 rounded font-black">
-                SOC
-              </span>
-            </div>
+          <div className="cursor-pointer" onClick={() => navigate('/')}>
+            <Logo size="sm" showWordmark={true} />
           </div>
 
           <button
@@ -125,7 +127,7 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
 
-            {/* Top Tabs: Sign In / Create Account */}
+            {/* Top Tabs: Sign In / Create Account & Cyber Lime Emblem */}
             <div className="flex items-center justify-between">
               <div className="flex items-center p-1 bg-[#F4F4F1] rounded-2xl border border-slate-200">
                 <button
@@ -148,17 +150,33 @@ export const LoginPage: React.FC = () => {
                 </button>
               </div>
 
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F4F4F1] text-[10px] font-mono text-slate-800 font-bold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F4F4F1] text-[10px] font-mono text-slate-800 font-bold border border-slate-200">
                 <Lock className="w-3 h-3 text-slate-700" />
-                <span>LEVEL 4</span>
+                <span>SECURE ACCESS</span>
               </div>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-                {isRegister ? 'Create SecOps Account' : 'Sign in to TrustForge'}
-              </h2>
-              <p className="text-xs text-slate-500 mt-1 font-medium leading-relaxed">
+            {/* Centered Cybernetic Logo Emblem & Heading */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-[#111111] p-1.5 border border-[#D4FF00]/40 shadow-[0_0_15px_rgba(212,255,0,0.25)] flex items-center justify-center flex-shrink-0">
+                  <img
+                    src="/trustforge_logo.png"
+                    alt="TrustForge Logo"
+                    className="w-full h-full object-contain rounded-xl"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-none">
+                    {isRegister ? 'Create SecOps Account' : 'Sign in to TrustForge'}
+                  </h2>
+                  <p className="text-[11px] font-mono text-slate-400 font-bold uppercase tracking-widest mt-1">
+                    CYBERNETIC AI SECURITY • SINCE 2026
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
                 {isRegister 
                   ? 'Provision enterprise credentials and access autonomous agent testing sandboxes.'
                   : 'Forge Trust in Autonomous AI — Authenticate with SecOps credentials or SSO.'}

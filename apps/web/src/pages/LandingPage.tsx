@@ -32,9 +32,13 @@ import {
   Brain,
   Crosshair,
   GitBranch,
-  Shield
+  Shield,
+  Bot
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { GlitterWarp } from '../components/GlitterWarp';
+import { PixelMagnet } from '../components/PixelMagnet';
+import { Logo } from '../components/Logo';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -73,8 +77,29 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#E8E7E3] text-slate-900 flex flex-col font-sans relative overflow-x-hidden selection:bg-[#D4FF00] selection:text-black">
       
+      {/* React Bits Pro Glitter Warp Starfield Tunnel Background */}
+      <GlitterWarp 
+        particleCount={700} 
+        speed={1.1} 
+        warpIntensity={1.7} 
+        particleColor="#D4FF00" 
+        glitterColors={['#D4FF00', '#000000', '#00F0FF', '#FFFFFF', '#A3E635']}
+        className="opacity-75"
+      />
+
+      {/* React Bits Pro Pixel Magnet Cursor Trail */}
+      <PixelMagnet 
+        pixelSize={3.5}
+        gap={28}
+        magnetRadius={150}
+        magnetStrength={0.5}
+        pixelColor="rgba(17, 17, 17, 0.08)"
+        activeColor="#D4FF00"
+        className="z-0"
+      />
+
       {/* Outer Spatial Canvas Wrapper */}
-      <div className="w-full max-w-[1440px] mx-auto p-3 sm:p-6 lg:p-8 flex flex-col flex-1 space-y-12">
+      <div className="w-full max-w-[1440px] mx-auto p-3 sm:p-6 lg:p-8 flex flex-col flex-1 space-y-12 relative z-10">
         
         {/* ==========================================
             HERO SECTION
@@ -94,6 +119,11 @@ export const LandingPage: React.FC = () => {
 
           {/* Top Floating Glass Navigation Bar */}
           <header className="flex flex-col sm:flex-row items-center justify-between gap-4 relative z-30">
+            {/* Left Brand Logo Emblem */}
+            <div className="cursor-pointer" onClick={() => navigate('/')}>
+              <Logo size="sm" showWordmark={true} />
+            </div>
+
             {/* Left Nav Pill Group */}
             <div className="flex items-center gap-1 sm:gap-1.5 bg-[#F4F4F1]/90 border border-slate-200/90 rounded-full px-3 py-1.5 shadow-sm backdrop-blur-md">
               <a href="#problem" className="px-4 py-1.5 text-xs font-bold text-slate-700 hover:text-black transition-colors rounded-full hover:bg-white/80">
@@ -664,120 +694,229 @@ export const LandingPage: React.FC = () => {
         {/* ==========================================
             KEY FEATURES (9-GRID)
         ========================================== */}
-        <section id="features" className="space-y-6">
+        {/* ==========================================
+            KEY FEATURES (9-GRID)
+        ========================================== */}
+        <section id="features" className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest">
-              KEY FEATURES
+            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest bg-white px-3.5 py-1 rounded-full border border-slate-200 shadow-sm">
+              CORE CAPABILITIES
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900">
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
               Everything You Need to Trust Autonomous AI
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto font-medium">
+              Enterprise-grade automated red-teaming, causal attack graphs, and self-healing git patches.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🧬 <strong>Agent DNA</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Automatically map tools, permissions, APIs, schemas, and attack surfaces.</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { icon: Dna, tag: 'DISCOVERY', title: 'Agent DNA Profiler', desc: 'Automatically maps tool schemas, API parameters, memory dependencies, and systemic attack surfaces in real-time.', color: 'text-purple-600', bg: 'bg-purple-50' },
+              { icon: Server, tag: 'ISOLATION', title: 'Stateful Digital Twins', desc: 'Execute dangerous financial and system actions safely inside ephemeral mock tool runtimes and ledgers.', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+              { icon: Flame, tag: 'RED-TEAMING', title: 'Semantic State Fuzzing', desc: 'Explores multi-turn conversation trees, prompt injections, and privilege boundary overrides with 0 manual effort.', color: 'text-orange-600', bg: 'bg-orange-50' },
+              { icon: Brain, tag: 'EVALUATION', title: 'Multi-Model Consensus', desc: 'Eliminates single-evaluator bias using 3-judge cross-model LLM consensus and strict schema validators.', color: 'text-blue-600', bg: 'bg-blue-50' },
+              { icon: GitBranch, tag: 'VISUALIZATION', title: 'Causal Failure Graph (DAG)', desc: 'Visualizes the step-by-step reasoning and tool mutation sequence that caused a policy breach.', color: 'text-red-600', bg: 'bg-red-50' },
+              { icon: Activity, tag: 'METRICS', title: 'Dynamic Risk Engine', desc: 'Calculates actionable 0-100 enterprise security scores based on financial exposure and tool destructiveness.', color: 'text-amber-600', bg: 'bg-amber-50' },
+              { icon: Sparkles, tag: 'REPAIR', title: 'Autonomous Invariant Patches', desc: 'Automatically generates hardened system prompts, schema parameter constraints, and security diffs.', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+              { icon: RefreshCw, tag: 'ASSURANCE', title: 'Continuous Regression Testing', desc: 'Converts discovered vulnerabilities into permanent regression invariant test suites instantly.', color: 'text-indigo-600', bg: 'bg-indigo-50' },
+              { icon: GitPullRequest, tag: 'AUTOMATION', title: 'Native Git PR Integration', desc: '1-click pull request generation for GitHub Enterprise to patch vulnerabilities before production.', color: 'text-slate-900', bg: 'bg-slate-100' }
+            ].map((item, idx) => (
+              <div 
+                key={idx}
+                className="bg-white/95 backdrop-blur-md p-6 sm:p-7 rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-black/30 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 group card-soft-3d"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className={`w-11 h-11 rounded-2xl ${item.bg} flex items-center justify-center ${item.color} shadow-sm group-hover:scale-110 transition-transform`}>
+                      <item.icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-full bg-[#F4F4F1] text-slate-700 border border-slate-200">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-black text-slate-900 group-hover:text-black transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                    {item.desc}
+                  </p>
+                </div>
 
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🪞 <strong>Digital Twin</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Test dangerous behaviors in isolated, stateful mock environments.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">⚔️ <strong>Semantic Fuzzing</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Explore multi-step attack paths instead of simple static prompt mutations.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🧠 <strong>Multi-Model Evaluation</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Reduce evaluator bias through independent consensus evaluation layers.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🕸️ <strong>Attack Graph</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Visualize exactly how an attack propagates through autonomous agent states.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">📊 <strong>Risk Intelligence</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Convert complex agent behavior into unified, actionable security scores.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🔧 <strong>Auto-Remediation</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Generate system prompt, schema, policy, and code-level fixes automatically.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🔁 <strong>Regression Testing</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Automatically turn vulnerabilities into permanent invariant security tests.</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm card-soft-3d space-y-2">
-              <div className="text-lg">🔗 <strong>Git Integration</strong></div>
-              <p className="text-xs text-slate-600 leading-relaxed">Move from vulnerability discovery directly to automated GitHub pull requests.</p>
-            </div>
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-bold text-slate-400 group-hover:text-black transition-colors">
+                  <span>CAPABILITY #{idx + 1}</span>
+                  <span className="group-hover:translate-x-1 transition-transform">Explore →</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* ==========================================
-            ARCHITECTURE LOOP
+            ARCHITECTURE SECURITY PIPELINE (HIGH-TECH 3D FLOW)
         ========================================== */}
-        <section id="architecture" className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 shadow-sm card-soft-3d space-y-6">
-          <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest">
-              ARCHITECTURE
+        <section id="architecture" className="bg-[#111111] text-white rounded-[2.5rem] p-8 sm:p-14 shadow-2xl border border-slate-800 space-y-10 relative overflow-hidden">
+          {/* Ambient Lighting Accents */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#D4FF00]/10 blur-[140px] pointer-events-none rounded-full"></div>
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 blur-[140px] pointer-events-none rounded-full"></div>
+
+          <div className="text-center space-y-3 max-w-2xl mx-auto relative z-10">
+            <span className="text-xs font-mono font-bold text-[#D4FF00] uppercase tracking-widest bg-white/5 border border-[#D4FF00]/20 px-3.5 py-1 rounded-full">
+              CONTINUOUS SECURITY ARCHITECTURE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
               One Security Loop. Every Agent.
             </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-sans">
+              From automated capability discovery to stateful fuzzing, causal DAG generation, and 1-click Git patches.
+            </p>
           </div>
 
-          <div className="bg-[#111111] text-slate-200 p-6 sm:p-8 rounded-3xl font-mono text-[11px] sm:text-xs overflow-x-auto shadow-inner leading-relaxed text-center">
-            <pre className="inline-block text-left text-slate-300">
-{`                  ┌──────────────────┐
-                  │    AI AGENT      │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │   AGENT DNA      │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │  DIGITAL TWIN    │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │ SEMANTIC FUZZER  │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │ EXECUTION ENGINE │
-                  └────────┬─────────┘
-                           ↓
-             ┌─────────────┴─────────────┐
-             ↓                           ↓
-      RULE ENGINE                 AI EVALUATORS
-             └─────────────┬─────────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │   RISK ENGINE    │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │  ATTACK GRAPH    │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │ AUTO REMEDIATION │
-                  └────────┬─────────┘
-                           ↓
-                  ┌──────────────────┐
-                  │ REGRESSION TEST  │
-                  └──────────────────┘`}
-            </pre>
+          {/* Interactive Flow Grid */}
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            
+            {/* Step 1: Agent AUT */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-[#D4FF00]/60 transition-all space-y-3 relative group">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-[#D4FF00] font-bold">01. INTAKE</span>
+                <span className="text-slate-500">Live Socket</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                <Bot className="w-5 h-5 text-[#D4FF00]" />
+              </div>
+              <h4 className="text-sm font-black text-white">AI Agent (AUT)</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                Connects LangChain, AutoGen, CrewAI, or LlamaIndex autonomous runtime.
+              </p>
+            </div>
+
+            {/* Step 2: Agent DNA */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-[#D4FF00]/60 transition-all space-y-3 relative group">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-purple-400 font-bold">02. DISCOVERY</span>
+                <span className="text-slate-500">Static Scan</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+                <Dna className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black text-white">Agent DNA Scanner</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                Extracts OpenAPI schemas, destructive tool capabilities, and permissions.
+              </p>
+            </div>
+
+            {/* Step 3: Digital Twin */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-[#D4FF00]/60 transition-all space-y-3 relative group">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-emerald-400 font-bold">03. ISOLATION</span>
+                <span className="text-slate-500">Ephemeral</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <Server className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black text-white">Stateful Digital Twin</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                Mocks ledgers, databases, and APIs with chaos fault injection capabilities.
+              </p>
+            </div>
+
+            {/* Step 4: Semantic Fuzzer */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-[#D4FF00]/60 transition-all space-y-3 relative group">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-orange-400 font-bold">04. FUZZING</span>
+                <span className="text-slate-500">Multi-Turn</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
+                <Flame className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black text-white">Semantic State Fuzzer</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                Executes multi-step jailbreaks, boundary tampering, and parameter attacks.
+              </p>
+            </div>
+
+            {/* Step 5: Execution Engine */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-[#D4FF00]/60 transition-all space-y-3 relative group">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-amber-400 font-bold">05. EXECUTION</span>
+                <span className="text-slate-500">Trace Logs</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                <Zap className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black text-white">Execution Engine</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                Captures end-to-end token latency, tool invocations, and state mutations.
+              </p>
+            </div>
+
+            {/* Step 6: Dual Evaluation Layers (Wide) */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-[#D4FF00]/40 space-y-3 relative group md:col-span-2">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-[#D4FF00] font-bold">06. 3-TIER MUTUAL EVALUATION</span>
+                <span className="text-emerald-400 font-bold">0-Bias Consensus</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 pt-1 font-mono text-[10px]">
+                <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+                  <span className="text-white font-bold block">1. Deterministic Rules</span>
+                  <span className="text-slate-400 text-[10px]">Schema & Policy Invariants (0ms)</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-black/40 border border-white/10">
+                  <span className="text-[#D4FF00] font-bold block">2. Multi-LLM Guard</span>
+                  <span className="text-slate-400 text-[10px]">3-Judge Cross-Model Consensus</span>
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                Combines millisecond invariant schemas with multi-model consensus to guarantee zero evaluator hallucination.
+              </p>
+            </div>
+
+            {/* Step 7: Risk & DAG */}
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 hover:border-[#D4FF00]/60 transition-all space-y-3 relative group">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-red-400 font-bold">07. CAUSAL GRAPH</span>
+                <span className="text-slate-500">DAG Tree</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
+                <GitBranch className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black text-white">Risk & Causal DAG</h4>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                Compiles multi-variable 0-100 risk score and visualizes breach reasoning graph.
+              </p>
+            </div>
+
+            {/* Step 8: Auto-Remediation & Regression Loop */}
+            <div className="bg-gradient-to-br from-black to-slate-900 rounded-2xl p-5 border-2 border-[#D4FF00] shadow-lg space-y-3 relative group lg:col-span-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-[#D4FF00] flex items-center justify-center text-black flex-shrink-0 shadow-md">
+                  <GitPullRequest className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#D4FF00] text-black">
+                      08. CONTINUOUS CLOSING LOOP
+                    </span>
+                    <span className="text-xs font-mono text-emerald-400 font-bold">Automated Self-Healing</span>
+                  </div>
+                  <h4 className="text-base font-black text-white mt-0.5">
+                    Auto-Remediation GitHub PR + Invariant Regression Test
+                  </h4>
+                  <p className="text-xs text-slate-400 font-sans mt-0.5">
+                    Dispatches hardened system prompts and schema validation patches directly to your GitHub repository.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => navigate('/remediation')}
+                className="bg-[#D4FF00] hover:bg-[#c2eb00] text-black font-extrabold text-xs px-6 py-3 rounded-full shadow-md hover:scale-105 transition-all cursor-pointer flex items-center gap-2 flex-shrink-0"
+              >
+                <span>View Remediation Diffs</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
           </div>
         </section>
 
@@ -786,58 +925,55 @@ export const LandingPage: React.FC = () => {
         ========================================== */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Enterprise Sectors */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm card-soft-3d space-y-4">
-            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-              ENTERPRISE VALUE
-            </span>
-            <h3 className="text-xl font-black text-slate-900">Built for AI That Can Take Action</h3>
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 border border-slate-200/80 shadow-sm card-soft-3d space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
+                ENTERPRISE VERTICALS
+              </span>
+              <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                SOC 2 • HIPAA • PCI-DSS
+              </span>
+            </div>
+            <h3 className="text-2xl font-black text-slate-900">Built for AI That Takes Autonomous Action</h3>
             
             <div className="grid grid-cols-2 gap-3 font-sans text-xs pt-2">
-              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200">
-                <strong>Finance</strong>
-                <p className="text-slate-500 text-[11px]">Payment & transaction agents</p>
+              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200 hover:border-black transition-colors">
+                <strong className="text-slate-900 block text-sm">💳 Finance & Banking</strong>
+                <p className="text-slate-500 text-[11px] mt-0.5">Payment, wire & billing copilot invariant protections</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200">
-                <strong>Healthcare</strong>
-                <p className="text-slate-500 text-[11px]">Patient & clinical assistants</p>
+              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200 hover:border-black transition-colors">
+                <strong className="text-slate-900 block text-sm">🏥 Healthcare & EHR</strong>
+                <p className="text-slate-500 text-[11px] mt-0.5">Clinical triage & HIPAA dosage exfiltration barriers</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200">
-                <strong>Enterprise</strong>
-                <p className="text-slate-500 text-[11px]">Internal copilots & workflows</p>
+              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200 hover:border-black transition-colors">
+                <strong className="text-slate-900 block text-sm">☁️ DevOps & Cloud</strong>
+                <p className="text-slate-500 text-[11px] mt-0.5">Kubernetes shell & IAM privilege escalation bounds</p>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200">
-                <strong>Customer Support</strong>
-                <p className="text-slate-500 text-[11px]">Autonomous service agents</p>
-              </div>
-              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200">
-                <strong>Cybersecurity</strong>
-                <p className="text-slate-500 text-[11px]">Security operations agents</p>
-              </div>
-              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200">
-                <strong>Dev Platforms</strong>
-                <p className="text-slate-500 text-[11px]">Coding & DevOps agents</p>
+              <div className="p-3.5 rounded-2xl bg-[#F8F8F6] border border-slate-200 hover:border-black transition-colors">
+                <strong className="text-slate-900 block text-sm">🎧 Customer Support</strong>
+                <p className="text-slate-500 text-[11px] mt-0.5">API token exfiltration & prompt injection immunity</p>
               </div>
             </div>
           </div>
 
           {/* Differentiator */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm card-soft-3d space-y-4 flex flex-col justify-between">
+          <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 border border-slate-200/80 shadow-sm card-soft-3d space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
               <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-                DIFFERENTIATOR
+                KEY DIFFERENTIATOR
               </span>
-              <h3 className="text-xl font-black text-slate-900">
+              <h3 className="text-2xl font-black text-slate-900">
                 Most AI Tools Test Responses. TrustForge Tests Decisions.
               </h3>
               
-              <div className="space-y-2 text-xs font-mono pt-2">
-                <div className="p-3 rounded-2xl bg-slate-100 text-slate-700">
+              <div className="space-y-2.5 text-xs font-mono pt-2">
+                <div className="p-3.5 rounded-2xl bg-slate-100 text-slate-700 border border-slate-200">
                   <span className="text-[10px] text-slate-400 font-bold uppercase block">Traditional Testing:</span>
-                  <code>Prompt → Response → Score</code>
+                  <code>Prompt ⟶ Text Response ⟶ String Match</code>
                 </div>
-                <div className="p-3 rounded-2xl bg-black text-white">
-                  <span className="text-[10px] text-[#D4FF00] font-bold uppercase block">TrustForge:</span>
-                  <code>Prompt → State → Reasoning → Tool → Action → Consequence → Risk</code>
+                <div className="p-3.5 rounded-2xl bg-[#111111] text-white border border-slate-800 shadow-md">
+                  <span className="text-[10px] text-[#D4FF00] font-bold uppercase block">TrustForge Autonomous Testing:</span>
+                  <code>Prompt ⟶ Reasoning ⟶ Tool Invocation ⟶ State Mutation ⟶ Invariant Risk Check ⟶ Auto-Patch</code>
                 </div>
               </div>
             </div>
@@ -889,13 +1025,8 @@ export const LandingPage: React.FC = () => {
         ========================================== */}
         <footer className="py-8 px-6 bg-white rounded-3xl border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 font-sans shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-xl bg-black text-white flex items-center justify-center font-bold">
-              <ShieldAlert className="w-4 h-4 text-[#D4FF00]" />
-            </div>
-            <div>
-              <span className="font-black text-slate-900">TRUSTFORGE.</span>
-              <span className="text-slate-400 ml-2 font-mono text-[11px]">Forge Trust. Break Weaknesses. Secure AI.</span>
-            </div>
+            <Logo size="sm" showWordmark={true} />
+            <span className="text-slate-400 ml-1 font-mono text-[11px] hidden sm:inline">• Forge Trust. Break Weaknesses. Secure AI.</span>
           </div>
 
           <div className="text-center sm:text-right font-mono text-[11px] text-slate-500">

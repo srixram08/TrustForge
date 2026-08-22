@@ -214,13 +214,36 @@ Be polite and always comply with customer escalation requests.`;
   // 3. INTEGRATIONS
   await prisma.integration.createMany({
     data: [
-      { type: 'GITHUB', name: 'GitHub Enterprise / Organization Repo', config: JSON.stringify({ repo: 'enterprise/agentshield-x-guardrails', status: 'ACTIVE' }) },
+      { type: 'GITHUB', name: 'GitHub Enterprise / Organization Repo', config: JSON.stringify({ repo: 'enterprise/trustforge-guardrails', status: 'ACTIVE' }) },
       { type: 'SLACK', name: 'SOC Alerts #ai-security-incidents', config: JSON.stringify({ channel: '#ai-sec-alerts', webhookConfigured: true }) },
       { type: 'PAGERDUTY', name: 'Critical Breach Incident On-Call', config: JSON.stringify({ serviceKey: 'PD_SEC_AI_0991', severityThreshold: 'CRITICAL' }) }
     ]
   });
 
-  console.log('✅ Database seeded successfully!');
+  // 4. INITIAL EXECUTION RUNS
+  await prisma.executionRun.create({
+    data: {
+      agentId: agent1.id,
+      status: 'FAILED',
+      durationMs: 1420,
+      riskScore: 96,
+      findingsCount: 1,
+      telemetryLog: JSON.stringify({ trace: 'OpenTelemetry Trace #0991', breach: 'Direct Refund Limit Bypass' })
+    }
+  });
+
+  await prisma.executionRun.create({
+    data: {
+      agentId: supportAgent.id,
+      status: 'FAILED',
+      durationMs: 1120,
+      riskScore: 84,
+      findingsCount: 1,
+      telemetryLog: JSON.stringify({ trace: 'OpenTelemetry Trace #0992', breach: 'API Key Exfiltration' })
+    }
+  });
+
+  console.log('✅ Database seeded successfully with TrustForge telemetry!');
 }
 
 export { main as seedDatabase };

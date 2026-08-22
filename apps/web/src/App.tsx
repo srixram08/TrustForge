@@ -16,6 +16,8 @@ import { Evaluations } from './pages/Evaluations';
 import { Remediation } from './pages/Remediation';
 import { Integrations } from './pages/Integrations';
 import { Settings } from './pages/Settings';
+import { GlitterWarp } from './components/GlitterWarp';
+import { PixelMagnet } from './components/PixelMagnet';
 
 const AppLayout: React.FC = () => {
   const location = useLocation();
@@ -31,9 +33,29 @@ const AppLayout: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#E8E7E3] text-slate-900 selection:bg-[#D4FF00] selection:text-black">
+    <div className="flex min-h-screen bg-[#E8E7E3] text-slate-900 selection:bg-[#D4FF00] selection:text-black relative overflow-x-hidden">
+      {/* Global Background Effects: Glitter Warp + Pixel Magnet Cursor Trail */}
+      <GlitterWarp 
+        particleCount={450} 
+        speed={0.8} 
+        warpIntensity={1.3} 
+        particleColor="#D4FF00" 
+        glitterColors={['#D4FF00', '#111111', '#00F0FF', '#FFFFFF', '#A3E635']}
+        className="opacity-40"
+      />
+
+      <PixelMagnet 
+        pixelSize={3.5}
+        gap={28}
+        magnetRadius={150}
+        magnetStrength={0.5}
+        pixelColor="rgba(17, 17, 17, 0.08)"
+        activeColor="#D4FF00"
+        className="z-0"
+      />
+
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto relative z-10">
         <Routes>
           <Route path="/soc" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />

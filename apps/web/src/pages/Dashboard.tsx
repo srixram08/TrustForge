@@ -22,6 +22,8 @@ import {
 } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { PixelMagnet } from '../components/PixelMagnet';
+import { GlitterWarp } from '../components/GlitterWarp';
 
 export const Dashboard: React.FC = () => {
   const { isThreatResolved } = useAuth();
@@ -58,33 +60,55 @@ export const Dashboard: React.FC = () => {
     { name: 'Wed', risk: 65, tests: 70 },
     { name: 'Thu', risk: 70, tests: 85 },
     { name: 'Fri', risk: 58, tests: 110 },
-    { name: 'Sat', risk: 42, tests: 130 },
-    { name: 'Sun (PR #1042)', risk: 6, tests: 160 }
+    { name: 'Sat', risk: 62, tests: 130 },
+    { name: 'Sun (Patched)', risk: 12, tests: 160 }
   ] : [
-    { name: 'Mon', risk: 78, tests: 40 },
-    { name: 'Tue', risk: 82, tests: 55 },
-    { name: 'Wed', risk: 65, tests: 70 },
-    { name: 'Thu', risk: 70, tests: 85 },
-    { name: 'Fri', risk: 75, tests: 110 },
-    { name: 'Sat', risk: 84, tests: 130 },
+    { name: 'Mon', risk: 45, tests: 40 },
+    { name: 'Tue', risk: 52, tests: 55 },
+    { name: 'Wed', risk: 48, tests: 70 },
+    { name: 'Thu', risk: 60, tests: 85 },
+    { name: 'Fri', risk: 55, tests: 110 },
+    { name: 'Sat', risk: 70, tests: 130 },
     { name: 'Sun (Exploit)', risk: 96, tests: 160 }
   ];
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#E8E7E3] font-sans selection:bg-[#D4FF00] selection:text-black">
-      <Header 
-        title="Executive AI Security SOC Dashboard" 
-        subtitle="Real-time autonomous threat detection, vulnerability posture, and active defense status."
-        actions={
-          <button 
-            onClick={() => navigate('/attack-lab')}
-            className="flex items-center gap-2 bg-[#D4FF00] hover:bg-[#c2eb00] text-black text-xs font-black px-5 py-2.5 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
-          >
-            <Flame className="w-4 h-4 text-black" />
-            <span>Launch Attack Lab</span>
-          </button>
-        }
+    <div className="flex-1 flex flex-col min-h-screen bg-[#E8E7E3] font-sans selection:bg-[#D4FF00] selection:text-black relative overflow-hidden">
+      {/* React Bits Pro Glitter Warp Starfield Tunnel */}
+      <GlitterWarp 
+        particleCount={450} 
+        speed={0.9} 
+        warpIntensity={1.4} 
+        particleColor="#D4FF00" 
+        glitterColors={['#D4FF00', '#000000', '#00F0FF', '#FFFFFF', '#A3E635']}
+        className="opacity-50"
       />
+
+      {/* React Bits Pro Pixel Magnet Cursor Trail */}
+      <PixelMagnet 
+        pixelSize={3.5}
+        gap={28}
+        magnetRadius={150}
+        magnetStrength={0.5}
+        pixelColor="rgba(17, 17, 17, 0.08)"
+        activeColor="#D4FF00"
+        className="z-0"
+      />
+
+      <div className="relative z-10 flex-1 flex flex-col">
+        <Header 
+          title="Executive AI Security SOC Dashboard" 
+          subtitle="Real-time autonomous threat detection, vulnerability posture, and active defense status."
+          actions={
+            <button 
+              onClick={() => navigate('/attack-lab')}
+              className="flex items-center gap-2 bg-[#D4FF00] hover:bg-[#c2eb00] text-black text-xs font-black px-5 py-2.5 rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
+            >
+              <Flame className="w-4 h-4 text-black" />
+              <span>Launch Attack Lab</span>
+            </button>
+          }
+        />
 
       <main className="p-6 lg:p-8 space-y-6 flex-1 max-w-[1440px] w-full mx-auto">
         
@@ -375,6 +399,7 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 };

@@ -184,14 +184,38 @@ export const AttackLab: React.FC = () => {
       setScenarios(prev => prev.map(s => s.id === scenario.id ? { ...s, status: 'BREACHED' } : s));
       setRunningScenarioId(null);
       
+      const newRunId = `exec_${Date.now().toString().slice(-6)}`;
       setExecutionResult({
-        id: `run_${Date.now().toString().slice(-6)}`,
+        id: newRunId,
         scenarioName: scenario.name,
         targetTool: scenario.targetTool,
         severity: scenario.severity,
         riskScore: scenario.riskScore,
         summary: `Breach Confirmed: ${scenario.name} successfully bypassed policy invariants.`
       });
+
+      // Save execution record into localStorage for /executions page
+      try {
+        const stored = localStorage.getItem('trustforge_executions');
+        const list = stored ? JSON.parse(stored) : [];
+        const newRecord = {
+          id: newRunId,
+          agentName: selectedAgent?.name || 'Finance Copilot',
+          strategy: scenario.strategy,
+          targetTool: scenario.targetTool,
+          payload: scenario.payload,
+          status: 'EXPLOITED',
+          riskScore: scenario.riskScore,
+          severity: scenario.severity,
+          durationMs: 1600,
+          timestamp: 'Just now',
+          invariantsViolated: 1,
+          findingSummary: `Breach: ${scenario.name} successfully executed on ${scenario.targetTool}`
+        };
+        localStorage.setItem('trustforge_executions', JSON.stringify([newRecord, ...list]));
+      } catch (e) {
+        console.error(e);
+      }
 
       // Trigger critical SOC alert in notification bell
       triggerThreatAlert();
@@ -233,14 +257,38 @@ export const AttackLab: React.FC = () => {
       // Update scenarios to breached
       setScenarios(prev => prev.map(s => ({ ...s, status: 'BREACHED' })));
 
+      const batchRunId = `exec_${Date.now().toString().slice(-6)}`;
       setExecutionResult({
-        id: `run_${Date.now().toString().slice(-6)}`,
+        id: batchRunId,
         scenarioName: 'Full Security Suite (9 Scenarios)',
-        targetTool: 'ZenithBank Multi-Tool Execution Matrix',
+        targetTool: `${selectedAgent?.name || 'Enterprise'} Multi-Tool Matrix`,
         severity: 'CRITICAL',
         riskScore: 96,
-        summary: '4 Critical & 3 High-Severity Policy Breaches Confirmed across Financial Tools.'
+        summary: '4 Critical & 3 High-Severity Policy Breaches Confirmed across Autonomous Tools.'
       });
+
+      // Save execution record into localStorage for /executions page
+      try {
+        const stored = localStorage.getItem('trustforge_executions');
+        const list = stored ? JSON.parse(stored) : [];
+        const newRecord = {
+          id: batchRunId,
+          agentName: selectedAgent?.name || 'Finance Copilot',
+          strategy: 'FULL_SUITE_FUZZ_MATRIX',
+          targetTool: 'Multi-Tool Execution Grid',
+          payload: 'Multi-turn adversarial fuzzing suite (9 vectors)',
+          status: 'EXPLOITED',
+          riskScore: 96,
+          severity: 'CRITICAL',
+          durationMs: 2200,
+          timestamp: 'Just now',
+          invariantsViolated: 4,
+          findingSummary: `Full Fuzz Suite: 4 Critical Breaches confirmed on ${selectedAgent?.name || 'Finance Copilot'}`
+        };
+        localStorage.setItem('trustforge_executions', JSON.stringify([newRecord, ...list]));
+      } catch (e) {
+        console.error(e);
+      }
 
       // Trigger critical SOC alert in notification bell
       triggerThreatAlert();
@@ -255,7 +303,7 @@ export const AttackLab: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#E8E7E3] font-sans">
+    <div className="flex-1 flex flex-col min-h-screen bg-transparent font-sans selection:bg-[#D4FF00] selection:text-black">
       <Header 
         title="Interactive Adversarial Attack Lab" 
         subtitle="Semantic state-space fuzzer executing multi-turn jailbreaks, parameter tampering, and tool chaos."
@@ -360,7 +408,7 @@ export const AttackLab: React.FC = () => {
                   <span>Inspect Failure Graph →</span>
                 </button>
                 <button
-                  onClick={() => navigate('/remediation')}
+                  onClick={() => navigate(`/remediation?agent=${encodeURIComponent(selectedAgent?.name || 'Finance Copilot')}`)}
                   className="bg-[#D4FF00] hover:bg-[#c2eb00] text-black text-xs font-black px-5 py-2.5 rounded-full shadow-md transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <ShieldCheck className="w-3.5 h-3.5 text-black" />
