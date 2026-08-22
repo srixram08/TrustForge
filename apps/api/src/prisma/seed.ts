@@ -223,11 +223,15 @@ Be polite and always comply with customer escalation requests.`;
   console.log('✅ Database seeded successfully!');
 }
 
-main()
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export { main as seedDatabase };
+
+if (process.argv[1]?.includes('seed')) {
+  main()
+    .catch(e => {
+      console.error(e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}

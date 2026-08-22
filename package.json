@@ -8,20 +8,26 @@
     "apps/*"
   ],
   "scripts": {
+    "postinstall": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "npm --workspace=apps/api run dev",
     "dev:web": "npm --workspace=apps/web run dev",
+    "prisma:generate": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
+    "prisma:push": "npx prisma db push --schema=apps/api/prisma/schema.prisma --accept-data-loss",
     "build:packages": "npm --workspace=packages/shared run build && npm --workspace=packages/core run build && npm --workspace=packages/digital-twin run build && npm --workspace=packages/fuzzing run build && npm --workspace=packages/evaluator run build",
     "build:api": "npm --workspace=apps/api run build",
     "build:web": "npm --workspace=apps/web run build",
-    "build": "npm run build:packages && npm run build:web && npm run build:api",
-    "start": "node apps/api/dist/index.js",
+    "build": "npx prisma generate --schema=apps/api/prisma/schema.prisma && npm run build:packages && npm run build:web && npm run build:api",
+    "start": "npx prisma db push --schema=apps/api/prisma/schema.prisma --accept-data-loss && node apps/api/dist/index.js",
     "seed": "npm --workspace=apps/api run seed",
     "test": "npm test --workspaces"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "prisma": "^6.4.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.9.6"

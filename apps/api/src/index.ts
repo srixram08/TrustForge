@@ -344,6 +344,17 @@ if (fs.existsSync(webDistPath)) {
   });
 }
 
-app.listen(PORT, () => {
+import { seedDatabase } from './prisma/seed.js';
+
+app.listen(PORT, async () => {
   console.log(`🛡️ TrustForge Enterprise API running on port ${PORT}`);
+  try {
+    const count = await prisma.agent.count();
+    if (count === 0) {
+      console.log('🌱 Empty database detected. Auto-seeding initial TrustForge data...');
+      await seedDatabase();
+    }
+  } catch (err) {
+    console.warn('⚠️ Auto-seed check notice:', err);
+  }
 });
