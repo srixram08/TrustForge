@@ -2,7 +2,7 @@
   "name": "agentshield-x-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "AgentShield X: Enterprise AI Agent Security Testing, Red-Teaming, Evaluation, and Auto-Remediation Platform",
+  "description": "TrustForge: Enterprise AI Agent Security Testing, Red-Teaming, Evaluation, and Auto-Remediation Platform",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -11,7 +11,10 @@
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "npm --workspace=apps/api run dev",
     "dev:web": "npm --workspace=apps/web run dev",
-    "build": "npm run build --workspaces",
+    "build:packages": "npm --workspace=packages/shared run build && npm --workspace=packages/core run build && npm --workspace=packages/digital-twin run build && npm --workspace=packages/fuzzing run build && npm --workspace=packages/evaluator run build",
+    "build:api": "npm --workspace=apps/api run build",
+    "build:web": "npm --workspace=apps/web run build",
+    "build": "npm run build:packages && npm run build:web && npm run build:api",
     "start": "node apps/api/dist/index.js",
     "seed": "npm --workspace=apps/api run seed",
     "test": "npm test --workspaces"
@@ -19,5 +22,8 @@
   "devDependencies": {
     "concurrently": "^9.1.2",
     "typescript": "^5.7.3"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.9.6"
   }
 }

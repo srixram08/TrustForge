@@ -1,10 +1,9 @@
 services:
-  # Option 1: Unified Full-Stack Web Service (Recommended for Free Tier)
   - type: web
     name: trustforge-app
     env: node
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV

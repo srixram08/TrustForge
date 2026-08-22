@@ -34,7 +34,7 @@ app.get('/api/overview', async (req: Request, res: Response) => {
 
     const agents = await prisma.agent.findMany({ select: { securityScore: true } });
     const avgSecurityScore = agents.length
-      ? Math.round(agents.reduce((sum, a) => sum + a.securityScore, 0) / agents.length)
+      ? Math.round(agents.reduce((sum: number, a: any) => sum + (a.securityScore || 0), 0) / agents.length)
       : 74;
 
     const recentFindings = await prisma.finding.findMany({
@@ -87,7 +87,8 @@ app.get('/api/agents', async (req: Request, res: Response) => {
 
 app.get('/api/agents/:id', async (req: Request, res: Response) => {
   try {
-    const agent = await AgentService.getAgentById(req.params.id);
+    const id = req.params.id as string;
+    const agent = await AgentService.getAgentById(id);
     if (!agent) return res.status(404).json({ error: 'Agent not found' });
     res.json(agent);
   } catch (err: any) {
@@ -106,7 +107,8 @@ app.post('/api/agents', async (req: Request, res: Response) => {
 
 app.post('/api/agents/:id/scan', async (req: Request, res: Response) => {
   try {
-    const dnaProfile = await AgentService.scanAgentDNA(req.params.id);
+    const id = req.params.id as string;
+    const dnaProfile = await AgentService.scanAgentDNA(id);
     res.json(dnaProfile);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -127,7 +129,8 @@ app.get('/api/digital-twins', async (req: Request, res: Response) => {
 
 app.post('/api/digital-twins/:id/faults', async (req: Request, res: Response) => {
   try {
-    const updated = await DigitalTwinService.updateFaults(req.params.id, req.body.faults);
+    const id = req.params.id as string;
+    const updated = await DigitalTwinService.updateFaults(id, req.body.faults);
     res.json(updated);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -136,7 +139,8 @@ app.post('/api/digital-twins/:id/faults', async (req: Request, res: Response) =>
 
 app.post('/api/digital-twins/:id/reset', async (req: Request, res: Response) => {
   try {
-    const updated = await DigitalTwinService.resetState(req.params.id);
+    const id = req.params.id as string;
+    const updated = await DigitalTwinService.resetState(id);
     res.json(updated);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -206,8 +210,9 @@ app.get('/api/executions', async (req: Request, res: Response) => {
 
 app.get('/api/executions/:id', async (req: Request, res: Response) => {
   try {
-    const run = await prisma.executionRun.findUnique({
-      where: { id: req.params.id },
+    const id = req.params.id as string;
+    const run: any = await prisma.executionRun.findUnique({
+      where: { id },
       include: {
         agent: true,
         findings: true,
@@ -218,23 +223,23 @@ app.get('/api/executions/:id', async (req: Request, res: Response) => {
     if (!run) return res.status(404).json({ error: 'Run not found' });
 
     // Generate DAG for the critical trace
-    const events: any[] = run.events.map(e => ({
+    const events: any[] = (run.events || []).map((e: any) => ({
       eventId: e.id,
       traceId: e.traceId,
       timestamp: e.timestamp.toISOString(),
       agentId: run.agentId,
       eventType: e.eventType as any,
       toolName: e.toolName || undefined,
-      inputPayload: JSON.parse(e.inputPayload),
-      outputPayload: JSON.parse(e.outputPayload),
+      inputPayload: JSON.parse(e.inputPayload || '{}'),
+      outputPayload: JSON.parse(e.outputPayload || '{}'),
       stateSnapshot: e.stateSnapshot ? JSON.parse(e.stateSnapshot) : undefined,
       latencyMs: e.latencyMs,
       tokenCount: e.tokenCount,
       error: e.error || undefined
     }));
 
-    const latestEval = run.evaluations[0] ? JSON.parse(run.evaluations[0].details) : undefined;
-    const dag = GraphService.buildDAG(run.events[0]?.traceId || 'trace_default', events, latestEval);
+    const latestEval = run.evaluations?.[0] ? JSON.parse(run.evaluations[0].details || '{}') : undefined;
+    const dag = GraphService.buildDAG(run.events?.[0]?.traceId || 'trace_default', events, latestEval);
 
     res.json({ ...run, dag });
   } catch (err: any) {
@@ -327,11 +332,8 @@ app.get('/api/integrations', async (req: Request, res: Response) => {
 // Production Static Web Serving (Render Single-Service Deployment)
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const webDistPath = path.resolve(__dirname, '../../../apps/web/dist');
+const webDistPath = path.resolve(process.cwd(), 'apps/web/dist');
 
 if (fs.existsSync(webDistPath)) {
   app.use(express.static(webDistPath));
