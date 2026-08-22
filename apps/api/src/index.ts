@@ -324,6 +324,24 @@ app.get('/api/integrations', async (req: Request, res: Response) => {
   }
 });
 
+// Production Static Web Serving (Render Single-Service Deployment)
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const webDistPath = path.resolve(__dirname, '../../../apps/web/dist');
+
+if (fs.existsSync(webDistPath)) {
+  app.use(express.static(webDistPath));
+  app.get('*', (req: Request, res: Response) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(webDistPath, 'index.html'));
+    }
+  });
+}
+
 app.listen(PORT, () => {
-  console.log(`🛡️ AgentShield X Enterprise API running on port ${PORT}`);
+  console.log(`🛡️ TrustForge Enterprise API running on port ${PORT}`);
 });

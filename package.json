@@ -12,6 +12,7 @@
     "dev:api": "npm --workspace=apps/api run dev",
     "dev:web": "npm --workspace=apps/web run dev",
     "build": "npm run build --workspaces",
+    "start": "node apps/api/dist/index.js",
     "seed": "npm --workspace=apps/api run seed",
     "test": "npm test --workspaces"
   },
