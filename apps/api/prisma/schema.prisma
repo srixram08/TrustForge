@@ -1,0 +1,243 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  role      String   @default("SECURITY_ENGINEER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Agent {
+  id              String           @id @default(uuid())
+  name            String
+  description     String
+  endpoint        String?
+  authType        String           @default("NONE")
+  framework       String           @default("LANGCHAIN")
+  model           String           @default("GPT-4O")
+  environment     String           @default("STAGING")
+  systemPrompt    String
+  version         String           @default("1.0.0")
+  securityScore   Float            @default(62.0)
+  status          String           @default("ACTIVE")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  tools           AgentTool[]
+  dna             AgentDNA?
+  digitalTwins    DigitalTwin[]
+  testSuites      TestSuite[]
+  executionRuns   ExecutionRun[]
+  findings        Finding[]
+  remediations    Remediation[]
+  regressionTests RegressionTest[]
+}
+
+model AgentTool {
+  id          String   @id @default(uuid())
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  parameters  String   // JSON string
+  riskLevel   String   @default("LOW_READ_ONLY")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AgentDNA {
+  id                     String   @id @default(uuid())
+  agentId                String   @unique
+  agent                  Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  overallRiskScore       Float
+  highestRiskTier        String
+  systemPromptWeaknesses String   // JSON array
+  capabilities           String   // JSON array
+  attackSurfaceMap       String   // JSON map
+  stateDependencies      String   // JSON array
+  highRiskCombinations   String   // JSON array
+  scannedAt              DateTime @default(now())
+}
+
+model DigitalTwin {
+  id             String   @id @default(uuid())
+  agentId        String
+  agent          Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  status         String   @default("ACTIVE")
+  initialState   String   // JSON
+  currentState   String   // JSON
+  activeFaults   String   // JSON
+  mutationLogs   String   // JSON
+  endpointCount  Int      @default(5)
+  stateObjCount  Int      @default(12)
+  isolationState String   @default("ENABLED")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model TestSuite {
+  id          String         @id @default(uuid())
+  agentId     String
+  agent       Agent          @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  category    String         @default("ADAPTIVE_RED_TEAM")
+  testCases   TestCase[]
+  runs        ExecutionRun[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model TestCase {
+  id           String        @id @default(uuid())
+  testSuiteId  String
+  testSuite    TestSuite     @relation(fields: [testSuiteId], references: [id], onDelete: Cascade)
+  name         String
+  category     String
+  prompt       String
+  turns        String?       // JSON array
+  chaosConfig  String?       // JSON object
+  expectedMode String
+  riskWeight   Float         @default(1.0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model ExecutionRun {
+  id            String           @id @default(uuid())
+  agentId       String
+  agent         Agent            @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  testSuiteId   String?
+  testSuite     TestSuite?       @relation(fields: [testSuiteId], references: [id], onDelete: SetNull)
+  status        String           @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  totalTests    Int              @default(0)
+  passedTests   Int              @default(0)
+  failedTests   Int              @default(0)
+  criticalCount Int              @default(0)
+  avgRiskScore  Float            @default(0.0)
+  durationMs    Int              @default(0)
+  events        ExecutionEvent[]
+  findings      Finding[]
+  evaluations   Evaluation[]
+  startedAt     DateTime         @default(now())
+  completedAt   DateTime?
+}
+
+model ExecutionEvent {
+  id            String       @id @default(uuid())
+  runId         String
+  run           ExecutionRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  traceId       String
+  timestamp     DateTime     @default(now())
+  eventType     String       // USER_INPUT, MODEL_RESPONSE, TOOL_CALL, etc.
+  toolName      String?
+  inputPayload  String       // JSON
+  outputPayload String       // JSON
+  stateSnapshot String?      // JSON
+  latencyMs     Int          @default(0)
+  tokenCount    Int          @default(0)
+  error         String?
+}
+
+model Finding {
+  id              String       @id @default(uuid())
+  agentId         String
+  agent           Agent        @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  runId           String
+  run             ExecutionRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  title           String
+  category        String
+  severity        String       // LOW, MEDIUM, HIGH, CRITICAL
+  riskScore       Float
+  confidence      Float
+  exploitability  Float
+  impact          Float
+  evidence        String       // JSON or text
+  affectedTool    String?
+  executionPath   String       // JSON array of nodes
+  recommendedFix  String
+  status          String       @default("OPEN") // OPEN, MITIGATED, RESOLVED
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Evaluation {
+  id            String       @id @default(uuid())
+  runId         String
+  run           ExecutionRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  verdict       String       // PASSED, FAILED
+  riskScore     Float
+  goalDrift     Float
+  toolLoopScore Float
+  anomalyScore  Float
+  layer1Score   Float
+  layer2Score   Float
+  layer3Score   Float
+  details       String       // JSON
+  createdAt     DateTime     @default(now())
+}
+
+model StateNode {
+  id        String   @id @default(uuid())
+  runId     String
+  nodeId    String
+  nodeType  String
+  label     String
+  data      String   // JSON
+  posX      Float
+  posY      Float
+  createdAt DateTime @default(now())
+}
+
+model Remediation {
+  id                 String           @id @default(uuid())
+  agentId            String
+  agent              Agent            @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  findingId          String?
+  title              String
+  severity           String
+  systemPromptPatch  String
+  schemaPatch        String           // JSON
+  policyRules        String           // JSON array
+  unifiedDiff        String
+  prNumber           Int?
+  prUrl              String?
+  status             String           @default("PROPOSED") // PROPOSED, APPLIED, VERIFIED
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  regressionTests    RegressionTest[]
+}
+
+model RegressionTest {
+  id             String       @id @default(uuid())
+  agentId        String
+  agent          Agent        @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  remediationId  String?
+  remediation    Remediation? @relation(fields: [remediationId], references: [id], onDelete: SetNull)
+  testName       String
+  inputPayload   String       // JSON
+  expectedResult String
+  actualResult   String?
+  status         String       @default("FAIL") // PASS, FAIL
+  scoreBefore    Float        @default(62.0)
+  scoreAfter     Float        @default(94.0)
+  executedAt     DateTime     @default(now())
+}
+
+model Integration {
+  id        String   @id @default(uuid())
+  type      String   // GITHUB, SLACK, PAGERDUTY, OPENAI, ANTHROPIC
+  name      String
+  config    String   // JSON (credentials/tokens masked)
+  status    String   @default("CONNECTED")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
