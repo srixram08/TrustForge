@@ -223,12 +223,14 @@ Be polite and always comply with customer escalation requests.`;
   // 4. INITIAL EXECUTION RUNS
   await prisma.executionRun.create({
     data: {
-      agentId: agent1.id,
+      agentId: financeAgent.id,
       status: 'FAILED',
       durationMs: 1420,
-      riskScore: 96,
-      findingsCount: 1,
-      telemetryLog: JSON.stringify({ trace: 'OpenTelemetry Trace #0991', breach: 'Direct Refund Limit Bypass' })
+      avgRiskScore: 96.0,
+      totalTests: 9,
+      passedTests: 5,
+      failedTests: 4,
+      criticalCount: 4
     }
   });
 
@@ -237,9 +239,11 @@ Be polite and always comply with customer escalation requests.`;
       agentId: supportAgent.id,
       status: 'FAILED',
       durationMs: 1120,
-      riskScore: 84,
-      findingsCount: 1,
-      telemetryLog: JSON.stringify({ trace: 'OpenTelemetry Trace #0992', breach: 'API Key Exfiltration' })
+      avgRiskScore: 84.0,
+      totalTests: 6,
+      passedTests: 4,
+      failedTests: 2,
+      criticalCount: 1
     }
   });
 
