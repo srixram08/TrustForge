@@ -423,7 +423,7 @@ export const Remediation: React.FC = () => {
 
         {/* Unified Git Diff Viewer (Varies Dynamically by Selected Fix) */}
         <div className="bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-6 card-soft-3d">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-black text-slate-900">Proposed Autonomous Security Invariant Diff</h3>
@@ -433,16 +433,69 @@ export const Remediation: React.FC = () => {
               </div>
               <p className="text-xs text-slate-500 mt-0.5">{selectedFix.description}</p>
             </div>
-            <div className="flex items-center gap-2 font-mono text-xs">
+            
+            <div className="flex items-center gap-3 font-mono text-xs flex-wrap sm:flex-nowrap">
               <span className="text-slate-700 bg-[#F4F4F1] px-3 py-1 rounded-full border border-slate-200 font-bold">
                 Target: {selectedFix.agentName} ({selectedFix.targetFile})
               </span>
+              
+              {!regressionResult ? (
+                <button
+                  onClick={() => triggerAutoSolve(selectedFix)}
+                  disabled={solvingStep !== null}
+                  className="flex items-center gap-2 bg-[#D4FF00] hover:bg-[#c2eb00] text-black text-xs font-black px-5 py-2 rounded-full shadow-md hover:scale-105 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-black" />
+                  <span>{solvingStep ? 'Applying...' : `⚡ Solve & Deploy Fix`}</span>
+                </button>
+              ) : (
+                <span className="flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-xs font-bold px-4 py-1.5 rounded-full border border-emerald-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>SOLVED ({selectedFix.scoreAfter}%)</span>
+                </span>
+              )}
             </div>
           </div>
 
           <DiffViewer 
             diffText={selectedFix.diffText}
           />
+
+          {/* Bottom Direct 1-Click Solve & Action Bar */}
+          <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-600">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Security Posture After Fix: <strong className="text-slate-900 font-bold">{selectedFix.scoreAfter}%</strong> (+{selectedFix.scoreAfter - selectedFix.scoreBefore}% Improvement)</span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate('/graph')}
+                className="bg-[#F4F4F1] hover:bg-[#EFEFEA] text-slate-900 text-xs font-bold px-4 py-2.5 rounded-2xl transition-all cursor-pointer"
+              >
+                Inspect Failure Graph →
+              </button>
+
+              {!regressionResult ? (
+                <button
+                  onClick={() => triggerAutoSolve(selectedFix)}
+                  disabled={solvingStep !== null}
+                  className="flex items-center gap-2 bg-[#111111] hover:bg-black text-[#D4FF00] text-xs font-black px-6 py-2.5 rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <Sparkles className="w-4 h-4 text-[#D4FF00]" />
+                  <span>⚡ 1-Click Solve & Apply Remedial Fix (PR #{selectedFix.prNumber})</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate('/soc')}
+                  className="flex items-center gap-2 bg-[#D4FF00] hover:bg-[#c2eb00] text-black text-xs font-black px-6 py-2.5 rounded-full shadow-md transition-all cursor-pointer"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-black" />
+                  <span>View Patched SOC Posture ({selectedFix.scoreAfter}%) →</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </main>
     </div>
